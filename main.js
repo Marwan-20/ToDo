@@ -27,7 +27,6 @@ addButton.addEventListener("click", () => {
     tasks.push(newTask);
     localStorage.setItem("tasks", JSON.stringify(tasks));
     taskInput.value = "";
-    loadTasks();
   }
 });
 
@@ -38,10 +37,28 @@ deleteButton.addEventListener("click", () => {
   listItems.forEach((li, index) => {
     let checkbox = li.querySelector("input[type='checkbox']");
     if (checkbox && checkbox.checked) {
-      tasks.splice(index, 1);
+       li.style.textDecoration = "line-through"; 
     }
   });
 
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  loadTasks(); 
 });
+
+
+
+fetch("https://jsonplaceholder.typicode.com/todos?_limit=10")
+.then(response => response.json())
+.then(data =>{
+  console.log(data)
+  let todo = data[0].title
+  console.log(todo)
+
+  data.forEach((dataObj, index) => {
+     ul.innerHTML += `
+      <li data-index="${index}">
+        <input type="checkbox" class="task-checkbox">
+        ${dataObj.title}
+      </li>`
+  })
+
+})
